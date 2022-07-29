@@ -29,6 +29,7 @@ export default {
 		todoList: {
 			deep: true, // 深度监听
 			handler(value) {
+				// 监视列表改变
 				localStorage.setItem('todoList', JSON.stringify(value));
 			}
 		}
