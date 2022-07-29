@@ -11,16 +11,16 @@
 <script>
 	export default {
 		name:'MyItem',
-		props:['todo', 'deleteTodo', 'checkedTodo'],
+		props:['todo'],
 		methods: {
 			handleDeleteTodo(id) {
 				if(confirm(`确定删除【${this.todo.title}】事情吗？`)){
 					//通知App组件将对应的todo对象删除
-					this.deleteTodo(id);
+					this.$bus.$emit('deleteTodo', id);
 				}
 			},
 			handleCheckedTodo(id) {
-				this.checkedTodo(id)
+				this.$bus.$emit('checkedTodo', id);
 			}
 		}
 	}

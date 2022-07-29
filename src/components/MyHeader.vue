@@ -8,7 +8,6 @@
 import { nanoid } from 'nanoid'
 export default {
 	name: 'MyHeader',
-	props: ['addTodo'],
 	data() {
 		return {
 			todo: ''
@@ -20,7 +19,7 @@ export default {
 				alert('输入不能为空')
 				return
 			}
-			this.addTodo({ id: nanoid(), title: this.todo.trim(), done: false });
+			this.$emit('addTodo', { id: nanoid(), title: this.todo.trim(), done: false });
 			this.todo = '';
 		}
 	}

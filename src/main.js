@@ -24,6 +24,10 @@ new Vue({
 	el:'#app',
 	//render函数完成了这个功能：将App组件放入容器中
   render: h => h(App),
+  beforeCreate(){
+	// 创建事件总线
+	Vue.prototype.$bus = this;
+  }
 	// render:q=> q('h1','你好啊')
 
 	// template:`<h1>你好啊</h1>`,

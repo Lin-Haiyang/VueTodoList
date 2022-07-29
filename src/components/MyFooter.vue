@@ -26,14 +26,14 @@ export default {
 				return this.dones === this.total;
 			},
 			set(value) {
-				this.checkedAllTodo(value);
+				this.$emit('checkedAllTodo', value);
 			}
 		}
 	},
 	methods: {
 		handleDeleteDone() {
 			if (this.dones) {
-				if (confirm(`确定删除${this.dones}个已完成事情吗？`)) this.deleteDone()
+				if (confirm(`确定删除${this.dones}个已完成事情吗？`)) this.$emit('deleteDone');
 			} else {
 				alert('目前没有已完成的事情！')
 			}

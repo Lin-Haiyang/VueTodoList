@@ -2,32 +2,44 @@
 	<div id="root">
 		<div class="todo-container">
 			<div class="todo-wrap">
-				<MyHeader :addTodo="addTodo" />
-				<MyList :todoList="todoList" :deleteTodo="deleteTodo" :checkedTodo="checkedTodo" />
-				<MyFooter :todoList="todoList" :deleteDone="deleteDone" :checkedAllTodo="checkedAllTodo" />
+				<MyHeader @addTodo="addTodo" />
+				<MyList :todoList="todoList" />
+				<MyFooter :todoList="todoList" @deleteDone="deleteDone" @checkedAllTodo="checkedAllTodo" />
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import { nanoid } from 'nanoid'
 import MyHeader from './components/MyHeader'
 import MyList from './components/MyList'
 import MyFooter from './components/MyFooter.vue'
 
-const todoList = [
-	{ id: nanoid(), title: '吃饭', done: true },
-	{ id: nanoid(), title: '睡觉', done: false },
-	{ id: nanoid(), title: '打代码', done: true },
-]
+// 本地缓存
+const todoList = JSON.parse(localStorage.getItem('todoList')) || [];
 export default {
 	name: 'App',
 	components: { MyHeader, MyList, MyFooter },
 	data() {
 		return {
-			todoList,
+			todoList
 		}
+	},
+	watch: {
+		todoList: {
+			deep: true, // 深度监听
+			handler(value) {
+				localStorage.setItem('todoList', JSON.stringify(value));
+			}
+		}
+	},
+	mounted() {
+		this.$bus.$on('deleteTodo', this.deleteTodo);
+		this.$bus.$on('checkedTodo', this.checkedTodo);
+	},
+	beforeDestroy() {
+		this.$bus.$off('deleteTodo');
+		this.$bus.$off('checkedTodo');
 	},
 	methods: {
 		addTodo(todo) {
