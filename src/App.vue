@@ -37,10 +37,12 @@ export default {
 	mounted() {
 		this.$bus.$on('deleteTodo', this.deleteTodo);
 		this.$bus.$on('checkedTodo', this.checkedTodo);
+		this.$bus.$on('editTodo', this.editTodo);
 	},
 	beforeDestroy() {
 		this.$bus.$off('deleteTodo');
 		this.$bus.$off('checkedTodo');
+		this.$bus.$off('editTodo');
 	},
 	methods: {
 		addTodo(todo) {
@@ -62,6 +64,13 @@ export default {
 		checkedAllTodo(done) {
 			this.todoList.forEach(todo => {
 				todo.done = done;
+			})
+		},
+		editTodo(id, value) {
+			this.todoList.forEach(todo => {
+				if (todo.id == id) {
+					todo.title = value;
+				}
 			})
 		}
 	}
@@ -85,6 +94,7 @@ body {
 	cursor: pointer;
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 	border-radius: 4px;
+	margin: 0 3px;
 }
 
 .btn-danger {
@@ -96,6 +106,17 @@ body {
 .btn-danger:hover {
 	color: #fff;
 	background-color: #bd362f;
+}
+
+.btn-normal {
+	color: #fff;
+	background-color: #49dacc;
+	border: 1px solid #2fa8bd;
+}
+
+.btn-normal:hover {
+	color: #fff;
+	background-color: #2fb3bd;
 }
 
 .btn:focus {

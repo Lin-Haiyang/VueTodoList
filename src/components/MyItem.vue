@@ -2,9 +2,17 @@
 	<li>
 		<label>
 			<input type="checkbox" :checked="todo.done" @change="handleCheckedTodo(todo.id)" />
-			<span>{{ todo.title}}</span>
+			<span v-show="!isEdit">{{ todo.title}}</span>
+			<input
+				v-show="isEdit"
+				ref="inputTitle"
+				type="text"
+				v-model="editTitle"
+				@blur="handleBlur(todo.id, $event)"
+			>
 		</label>
 		<button class="btn btn-danger" @click="handleDeleteTodo(todo.id)" >删除</button>
+		<button v-show="!isEdit" class="btn btn-normal" @click="handleEditTodo(todo)" >编辑</button>
 	</li>
 </template>
 
@@ -12,6 +20,12 @@
 	export default {
 		name:'MyItem',
 		props:['todo'],
+		data() {
+			return {
+				editTitle: '',
+				isEdit: false,
+			}
+		},
 		methods: {
 			handleDeleteTodo(id) {
 				if(confirm(`确定删除【${this.todo.title}】事情吗？`)){
@@ -21,6 +35,21 @@
 			},
 			handleCheckedTodo(id) {
 				this.$bus.$emit('checkedTodo', id);
+			},
+			handleEditTodo() {
+				this.isEdit = !this.isEdit;
+				this.editTitle = this.todo.title;
+				this.$nextTick(function(){
+					this.$refs.inputTitle.focus()
+				})
+			},
+			handleBlur(id, e) {
+				this.isEdit = !this.isEdit;
+				if (e.target.value) {
+					this.$bus.$emit('editTodo', id, e.target.value);
+				} else {
+					return
+				}
 			}
 		}
 	}
